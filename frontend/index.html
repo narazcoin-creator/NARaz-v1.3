@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="az">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080b0e">
+<title>NARaz 1.4</title>
+<style>
+:root{--bg:#080b0e;--panel:#0d141b;--panel2:#111922;--line:#202c36;--text:#f5f7f9;--muted:#7e8992;--red:#f21e3a;--green:#20c98a;--yellow:#f4b740}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Roboto,system-ui,sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}
+.app{min-height:100vh;background:radial-gradient(700px 350px at 85% -10%,rgba(242,30,58,.16),transparent 60%),var(--bg)}
+.top{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #18222b;background:rgba(8,11,14,.97);position:sticky;top:0;z-index:10}
+.logo{display:flex;gap:10px;align-items:center}.mark{width:36px;height:36px;border-radius:12px;background:linear-gradient(145deg,#5d0d18,#160b0e);display:grid;place-items:center;color:#ff304b;font-weight:900}
+.logo b{font-size:20px}.logo small{display:block;color:#707b84;font-size:8px;letter-spacing:1.2px}
+.top-actions{display:flex;gap:7px}.icon{width:39px;height:39px;border:1px solid #27333e;background:#111920;color:#d8dde1;border-radius:12px}
+.wrap{max-width:600px;margin:auto;padding:14px 13px 95px}.page{display:none}.page.active{display:block}
+.hero{position:relative;overflow:hidden;min-height:215px;border:1px solid #34232a;border-radius:22px;padding:21px;background:linear-gradient(110deg,#17090d,#170a0e 45%,#090d11)}
+.hero h1{font-size:29px;line-height:1.04;margin:10px 0 8px;max-width:310px}.hero p{font-size:11px;color:#a4adb4;line-height:1.5;max-width:330px}.eyebrow{font-size:9px;color:#ff2b48;font-weight:800;letter-spacing:1.5px}
+.primary{border:0;background:linear-gradient(180deg,#ff2442,#df1733);color:#fff;padding:13px 17px;border-radius:12px;font-size:12px;font-weight:800;box-shadow:0 8px 18px rgba(242,30,58,.22)}
+.secondary{border:1px solid #293640;background:#121b23;color:#e1e5e8;padding:11px 13px;border-radius:11px;font-size:11px}
+.balance{margin-top:11px;padding:18px;border-radius:20px;background:linear-gradient(145deg,#5c0d18,#241016 62%,#120e12);border:1px solid #64202c}
+.label{font-size:10px;color:#c5b3b7}.amount{font-size:31px;font-weight:850;margin-top:5px}.amount small{font-size:13px}.sub{font-size:10px;color:#b9a8ac;margin-top:3px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:11px}.actions button{padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#120b0d;color:#fff;font-size:11px;font-weight:700}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:16px 2px 9px}.section-head h2{font-size:16px;margin:0}.link{border:0;background:none;color:#ef2943;font-size:10px}
+.panel,.assets{margin-top:11px;padding:14px;border:1px solid var(--line);border-radius:18px;background:var(--panel)}.assets{padding:0;overflow:hidden}
+.asset{display:flex;align-items:center;gap:11px;padding:12px 13px;border-bottom:1px solid #18232c}.asset:last-child{border:0}.coin{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#1a232c;font-size:10px;font-weight:900}.coin.nar{background:#330d16;color:#ff2945}.coin.usdt{background:#0b3d35;color:#26d0a0}
+.asset-main{flex:1}.asset-main b{display:block;font-size:12px}.asset-main span{display:block;color:#7c8790;font-size:9px;margin-top:2px}.right{text-align:right}.right b{font-size:11px}.right span{display:block;color:#34cb8b;font-size:9px;margin-top:2px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.feature{border:1px solid var(--line);background:var(--panel);border-radius:17px;padding:14px;text-align:left;color:#fff;min-height:92px}.feature b{font-size:11px}.feature span{display:block;color:#7b8690;font-size:9px;margin-top:4px}
+.field{width:100%;background:#101821;border:1px solid #26333f;color:#fff;padding:12px;border-radius:11px;margin:5px 0;outline:none}.field:focus{border-color:#e72440}
+.status{padding:10px;border-radius:10px;background:#141d25;color:#aeb7be;font-size:10px;margin:8px 0}.ok{color:#34cf91}.bad{color:#ff5267}
+.nav{position:fixed;bottom:0;left:0;right:0;height:76px;background:rgba(8,12,16,.98);border-top:1px solid #1d2730;display:grid;grid-template-columns:repeat(5,1fr);z-index:20;padding-bottom:env(safe-area-inset-bottom)}
+.nav button{border:0;background:none;color:#7b8790;font-size:8px}.nav button.active{color:#ff2744}.nav strong{display:block;font-size:18px;line-height:25px}
+.tabs{display:flex;gap:6px;margin-bottom:10px}.tabs button{flex:1;border:1px solid #27333e;background:#111a22;color:#84909a;padding:10px;border-radius:9px;font-size:10px}.tabs button.active{background:#26323e;color:#fff}
+.marketrow{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:11px 0;border-bottom:1px solid #1b252e}.marketrow:last-child{border:0}.marketname b{font-size:11px}.marketname span{display:block;color:#69757f;font-size:9px;margin-top:2px}.price{font-size:10px;text-align:right}.up{color:#34cb8b;font-size:9px}.down{color:#f33d55;font-size:9px}
+.trade-head{display:flex;gap:8px}.pair{flex:1;background:#101820;border:1px solid #283540;color:#fff;border-radius:12px;padding:10px;font-weight:800}.ticker{display:flex;justify-content:space-between;align-items:end;padding:12px 2px 8px}.ticker-price{font-size:27px;font-weight:850}.meta{font-size:9px;color:#7c8792}.dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#28d08f;margin-right:5px}
+.chart{height:175px;border:1px solid var(--line);border-radius:17px;background:#0a1016;position:relative;overflow:hidden}.chart canvas{width:100%;height:100%}
+.orderbook{display:grid;grid-template-columns:1fr 1fr;gap:12px}.bookrow{display:grid;grid-template-columns:1fr 1fr;font-size:9px;padding:3px 0}.bookrow span:last-child{text-align:right}.ask{color:#ff5368}.bid{color:#35cf91}
+.ordergrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.side-title{font-size:10px;font-weight:800;margin-bottom:6px}.buy{color:#35cf91}.sell{color:#ff3d55}.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}.quick button{border:1px solid #26323d;background:#111a22;color:#9ca6ad;border-radius:8px;padding:7px;font-size:8px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.74);display:none;align-items:flex-end;justify-content:center;padding:12px;z-index:50}.modal.open{display:flex}.dialog{width:min(590px,100%);max-height:92vh;overflow:auto;background:#0e151c;border:1px solid #28333d;border-radius:22px;padding:18px}.dialog h2{font-size:18px;margin:0 0 5px}.close{float:right;border:0;background:#151e26;color:#aeb7be;width:34px;height:34px;border-radius:10px;font-size:18px}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:4px;background:#111a22;border-radius:13px;margin:10px 0}.auth-tabs button{padding:10px;border:0;background:transparent;color:#77838d;border-radius:10px}.auth-tabs button.active{background:#25313d;color:#fff}
+.chain{font-size:9px}.block{padding:10px 0;border-bottom:1px solid #1b252e}.hash{word-break:break-all;color:#87939d}
+.hidden{display:none!important}
+@media(min-width:700px){.nav{position:static;max-width:600px;margin:0 auto 20px;border:1px solid #1e2933;border-radius:18px}.modal{align-items:center}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="logo"><div class="mark">N</div><div><b>NARaz</b><small>DİJİTAL EKOSİSTEM · v1.4</small></div></div>
+  <div class="top-actions"><button class="icon" onclick="openAuth()">◉</button><button class="icon" onclick="openNetwork()">⚙</button></div>
+</header>
+
+<main class="wrap">
+<section id="home" class="page active">
+  <div class="hero"><div class="eyebrow">NARaz Network</div><h1>Daha güclü gələcək üçün.</h1><p>Wallet, canlı bazar, demo trading və NARaz blockchain bir platformada.</p><button class="primary" onclick="go('trade')">Bazara keç</button></div>
+  <div class="balance"><div class="label">Ümumi balans</div><div class="amount" id="narBalance">10,000 <small>NARaz</small></div><div class="sub" id="walletAddr">Demo hesab · qoşulur...</div><div class="actions"><button onclick="openTransfer()">↗ Göndər</button><button onclick="faucet()">↓ Testnet al</button></div></div>
+  <div class="section-head"><h2>Aktivlər</h2><button class="link" onclick="go('wallet')">Hamısına bax</button></div>
+  <div class="assets" id="assets"></div>
+  <div class="section-head"><h2>Bazar</h2><button class="link" onclick="go('trade')">Pro Trade</button></div>
+  <div class="panel" id="marketMini">Yüklənir...</div>
+  <div class="grid" style="margin-top:11px">
+    <button class="feature" onclick="go('trade')"><b>Pro Trade</b><span>Market və Limit əmrləri</span></button>
+    <button class="feature" onclick="go('wallet')"><b>Cüzdan</b><span>NARaz + demo aktivləri</span></button>
+    <button class="feature" onclick="go('chain')"><b>Blockchain</b><span>Bloklar və hash chain</span></button>
+    <button class="feature" onclick="openNetwork()"><b>Network</b><span>HTTP + WebSocket + Market</span></button>
+  </div>
+  <div class="panel"><b>NARaz Network</b><p id="networkStatus" class="meta">Qoşulur...</p></div>
+</section>
+
+<section id="wallet" class="page">
+  <div class="section-head"><h2>Cüzdan</h2><button class="link" onclick="faucet()">+ Testnet</button></div>
+  <div class="balance"><div class="label">NARaz balansı</div><div class="amount" id="walletNar">— <small>NARaz</small></div><div class="sub" id="walletFull">—</div></div>
+  <div class="panel"><b>Aktivlər</b><div id="walletAssets" style="margin-top:8px"></div></div>
+</section>
+
+<section id="trade" class="page">
+  <div class="trade-head"><select class="pair" id="pair" onchange="loadBook()"><option>BTC/USDT</option><option>ETH/USDT</option><option>BNB/USDT</option><option>SOL/USDT</option></select><button class="icon" onclick="loadTrade()">↻</button></div>
+  <div class="ticker"><div><div class="ticker-price" id="tradePrice">—</div><div class="meta" id="tradeChange">—</div></div><div class="meta"><span class="dot"></span><span id="source">Live</span></div></div>
+  <div class="chart"><canvas id="chart"></canvas></div>
+  <div class="panel"><div class="section-head" style="margin-top:0"><h2>Order Book</h2><span class="meta" id="bookTime">—</span></div><div class="orderbook"><div><div class="meta">ASK</div><div id="asks"></div></div><div><div class="meta">BID</div><div id="bids"></div></div></div></div>
+  <div class="panel"><div class="tabs"><button id="marketTab" class="active" onclick="setType('MARKET')">Market</button><button id="limitTab" onclick="setType('LIMIT')">Limit</button></div>
+    <div class="ordergrid">
+      <div><div class="side-title buy">Alış</div><input class="field" id="buyQty" type="number" min="0" step="any" placeholder="Miqdar"><input class="field hidden" id="buyPrice" type="number" min="0" step="any" placeholder="Qiymət"><div class="quick"><button onclick="pct('buy',.25)">25%</button><button onclick="pct('buy',.5)">50%</button><button onclick="pct('buy',.75)">75%</button><button onclick="pct('buy',1)">100%</button></div><button class="primary" style="width:100%;margin-top:7px" onclick="order('BUY')">Al</button></div>
+      <div><div class="side-title sell">Satış</div><input class="field" id="sellQty" type="number" min="0" step="any" placeholder="Miqdar"><input class="field hidden" id="sellPrice" type="number" min="0" step="any" placeholder="Qiymət"><div class="quick"><button onclick="pct('sell',.25)">25%</button><button onclick="pct('sell',.5)">50%</button><button onclick="pct('sell',.75)">75%</button><button onclick="pct('sell',1)">100%</button></div><button class="secondary" style="width:100%;margin-top:7px" onclick="order('SELL')">Sat</button></div>
+    </div>
+    <div class="status" id="tradeStatus">Demo exchange hazırdır. Market qiyməti real public market-dən gəlir.</div>
+  </div>
+  <div class="panel"><div class="section-head" style="margin-top:0"><h2>Open Orders</h2><button class="link" onclick="loadOrders()">Yenilə</button></div><div id="orders">—</div></div>
+</section>
+
+<section id="chain" class="page">
+  <div class="section-head"><h2>NARaz Blockchain</h2><button class="link" onclick="loadChain()">Yenilə</button></div>
+  <div class="panel"><div class="statgrid"><div><b id="height">—</b><div class="meta">Height</div></div><div><b id="valid">—</b><div class="meta">Chain valid</div></div></div></div>
+  <div class="panel chain" id="blocks">Yüklənir...</div>
+</section>
+
+<section id="settings" class="page">
+  <div class="section-head"><h2>Parametrlər</h2></div>
+  <div class="panel"><b>Network endpoint</b><input class="field" id="apiUrl" placeholder="http://192.168.x.x:8080"><button class="primary" style="width:100%;margin-top:7px" onclick="saveNetwork()">Qoşul</button><div class="status" id="networkDetail">—</div></div>
+  <div class="panel"><b>Demo hesab</b><p class="meta">Qeydiyyat real server bazasında işləyir. Yeni hesab avtomatik NARaz testnet grant və 10,000 USDT demo trading balansı alır.</p><button class="secondary" onclick="openAuth()">Daxil ol / Qeydiyyat</button></div>
+  <div class="panel"><button class="secondary" onclick="logout()">Çıxış</button></div>
+</section>
+</main>
+
+<nav class="nav">
+<button onclick="go('home')" data-page="home" class="active"><strong>⌂</strong>Home</button>
+<button onclick="go('wallet')" data-page="wallet"><strong>◫</strong>Wallet</button>
+<button onclick="go('trade')" data-page="trade"><strong>⇄</strong>Trade</button>
+<button onclick="go('chain')" data-page="chain"><strong>◇</strong>Chain</button>
+<button onclick="go('settings')" data-page="settings"><strong>⚙</strong>Settings</button>
+</nav>
+</div>
+
+<div class="modal" id="authModal"><div class="dialog">
+<button class="close" onclick="closeModal('authModal')">×</button><h2>NARaz hesabı</h2>
+<div class="auth-tabs"><button id="loginTab" class="active" onclick="authMode('login')">Daxil ol</button><button id="registerTab" onclick="authMode('register')">Qeydiyyat</button></div>
+<div id="loginBox"><input class="field" id="loginId" placeholder="Username və ya email"><input class="field" id="loginPw" type="password" placeholder="Şifrə"><button class="primary" style="width:100%" onclick="login()">Daxil ol</button></div>
+<div id="registerBox" class="hidden"><input class="field" id="regUser" placeholder="Username"><input class="field" id="regEmail" placeholder="Email"><input class="field" id="regPw" type="password" placeholder="Şifrə (min. 8 simvol)"><button class="primary" style="width:100%" onclick="register()">Hesab yarat</button></div>
+<div class="status" id="authStatus">—</div>
+</div></div>
+
+<div class="modal" id="networkModal"><div class="dialog">
+<button class="close" onclick="closeModal('networkModal')">×</button><h2>NARaz Network</h2><p class="meta">Bu panel artıq sadəcə maket deyil: HTTP API, WebSocket market stream və blockchain health status-u yoxlanılır.</p>
+<input class="field" id="networkInput" placeholder="http://server:8080"><button class="primary" style="width:100%" onclick="saveNetwork(true)">Qoşul və yoxla</button>
+<div class="status" id="networkModalStatus">—</div>
+</div></div>
+
+<div class="modal" id="transferModal"><div class="dialog">
+<button class="close" onclick="closeModal('transferModal')">×</button><h2>NARaz transfer</h2>
+<input class="field" id="recipient" placeholder="NAR1... address">
+<input class="field" id="amount" type="number" min="0" step="any" placeholder="Miqdar">
+<button class="primary" style="width:100%;margin-top:7px" onclick="sendTransfer()">Göndər</button>
+<div class="status" id="transferStatus">Testnet transfer blockchain-ə yazılır.</div>
+</div></div>
+
+<script>
+const $=id=>document.getElementById(id);
+let API=localStorage.getItem("naraz_api")||"http://localhost:8080";
+let token=localStorage.getItem("naraz_token")||"";
+let currentPair="BTC/USDT", orderType="MARKET", marketItems={};
+
+function go(page){
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+  $(page).classList.add("active");
+  document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===page));
+  if(page==="wallet")loadWallet();
+  if(page==="trade")loadTrade();
+  if(page==="chain")loadChain();
+}
+function closeModal(id){$(id).classList.remove("open")}
+function openAuth(){ $("authModal").classList.add("open"); authMode("login") }
+function openNetwork(){ $("networkInput").value=API; $("networkModal").classList.add("open") }
+function openTransfer(){ $("transferModal").classList.add("open") }
+function authMode(mode){
+  $("loginBox").classList.toggle("hidden",mode!=="login"); $("registerBox").classList.toggle("hidden",mode!=="register");
+  $("loginTab").classList.toggle("active",mode==="login"); $("registerTab").classList.toggle("active",mode==="register");
+  $("authStatus").textContent="";
+}
+function api(path,options={}){
+  options.headers=Object.assign({"Content-Type":"application/json"},options.headers||{});
+  if(token)options.headers.Authorization="Bearer "+token;
+  return fetch(API.replace(/\/$/,"")+path,options).then(async r=>{
+    const d=await r.json().catch(()=>({ok:false,error:"INVALID_RESPONSE"}));
+    if(!r.ok)throw new Error(d.error||("HTTP "+r.status));
+    return d;
+  });
+}
+async function register(){
+  $("authStatus").textContent="Hesab yaradılır...";
+  try{
+    const d=await api("/api/register",{method:"POST",body:JSON.stringify({username:$("regUser").value,email:$("regEmail").value,password:$("regPw").value})});
+    token=d.token; localStorage.setItem("naraz_token",token); $("authStatus").innerHTML='<span class="ok">Hesab yaradıldı. Network aktivdir.</span>'; await refresh(); setTimeout(()=>closeModal("authModal"),500);
+  }catch(e){$("authStatus").innerHTML='<span class="bad">'+e.message+"</span>"}
+}
+async function login(){
+  $("authStatus").textContent="Daxil olunur...";
+  try{
+    const d=await api("/api/login",{method:"POST",body:JSON.stringify({identifier:$("loginId").value,password:$("loginPw").value})});
+    token=d.token; localStorage.setItem("naraz_token",token); $("authStatus").innerHTML='<span class="ok">Uğurlu giriş.</span>'; await refresh(); setTimeout(()=>closeModal("authModal"),400);
+  }catch(e){$("authStatus").innerHTML='<span class="bad">'+e.message+"</span>"}
+}
+async function logout(){try{await api("/api/logout",{method:"POST"})}catch(e){} token="";localStorage.removeItem("naraz_token");refresh()}
+async function refresh(){await Promise.all([loadNetwork(),loadMarket(),loadWallet()]);loadTrade()}
+async function loadNetwork(){
+  try{
+    const d=await api("/api/network");
+    $("networkStatus").innerHTML='<span class="ok">● Online · '+d.network+" v"+d.version+" · chain #"+d.chain.height+" · "+(d.market.connected?"live market":"market reconnecting")+"</span>";
+    $("networkDetail").textContent="HTTP "+d.http_port+" · WS "+d.websocket_port+" · chain valid: "+d.chain.valid;
+  }catch(e){$("networkStatus").innerHTML='<span class="bad">● Network offline · '+e.message+"</span>"}
+}
+async function saveNetwork(fromModal=false){
+  const value=(fromModal?$("networkInput"):$("apiUrl")).value.trim().replace(/\/$/,"");
+  if(!value)return;
+  API=value;localStorage.setItem("naraz_api",API);
+  if(fromModal) $("networkModalStatus").textContent="Yoxlanılır...";
+  try{await loadNetwork();await loadMarket();if(fromModal){$("networkModalStatus").innerHTML='<span class="ok">Qoşulma uğurludur.</span>';setTimeout(()=>closeModal("networkModal"),500)}}catch(e){if(fromModal)$("networkModalStatus").textContent=e.message}
+}
+async function loadMarket(){
+  try{const d=await api("/api/market");marketItems={};(d.items||[]).forEach(x=>marketItems[x.symbol]=x);renderMarket()}
+  catch(e){$("marketMini").textContent="Market bağlantısı gözlənilir..."}
+}
+function renderMarket(){
+  const rows=Object.values(marketItems);
+  $("marketMini").innerHTML=rows.map(x=>'<div class="marketrow"><div class="marketname"><b>'+x.symbol+'/USDT</b><span>'+x.source+"</span></div><div class=\"price\">$"+Number(x.price).toLocaleString(undefined,{maximumFractionDigits:x.price<1?6:2})+'</div><div class="'+(x.change>=0?"up":"down")+'">'+(x.change>=0?"+":"")+x.change.toFixed(2)+"%</div></div>").join("")||"Yüklənir...";
+  const assets=rows.map(x=>'<div class="asset"><div class="coin">'+x.symbol+'</div><div class="asset-main"><b>'+x.symbol+'</b><span>Live market</span></div><div class="right"><b>$'+Number(x.price).toLocaleString(undefined,{maximumFractionDigits:x.price<1?6:2})+'</b><span>'+(x.change>=0?"+":"")+x.change.toFixed(2)+"%</span></div></div>").join("");
+  $("assets").innerHTML='<div class="asset"><div class="coin nar">NAR</div><div class="asset-main"><b>NARaz</b><span>Native testnet asset</span></div><div class="right"><b id="assetNar">—</b></div></div><div class="asset"><div class="coin usdt">USDT</div><div class="asset-main"><b>USDT</b><span>Demo quote balance</span></div></div>'+assets;
+}
+async function loadWallet(){
+  if(!token){$("walletNar").textContent="10,000 NARaz";$("walletFull").textContent="Demo hesab";return}
+  try{
+    const d=await api("/api/wallet");$("narBalance").innerHTML=Number(d.naraz).toLocaleString()+" <small>NARaz</small>";$("walletNar").innerHTML=Number(d.naraz).toLocaleString()+" <small>NARaz</small>";$("walletFull").textContent=d.address;$("walletAddr").textContent=d.address;
+    $("walletAssets").innerHTML=(d.holdings||[]).map(h=>'<div class="asset"><div class="coin">'+h.asset+'</div><div class="asset-main"><b>'+h.asset+'</b><span>Available</span></div><div class="right"><b>'+Number(h.quantity).toLocaleString(undefined,{maximumFractionDigits:8})+'</b></div></div>').join("");
+  }catch(e){}
+}
+async function faucet(){if(!token){openAuth();return}try{await api("/api/faucet",{method:"POST",body:JSON.stringify({amount:1000})});await loadWallet();alert("1000 NARaz testnet göndərildi.")}catch(e){alert(e.message)}}
+async function sendTransfer(){
+  if(!token){closeModal("transferModal");openAuth();return}
+  const recipient=$("recipient").value.trim(), amount=parseFloat($("amount").value||"0");
+  $("transferStatus").textContent="Blockchain əməliyyatı yaradılır...";
+  try{
+    const d=await api("/api/transfer",{method:"POST",body:JSON.stringify({recipient,amount})});
+    $("transferStatus").innerHTML='<span class="ok">Transfer təsdiqləndi · Block #'+d.block.index+'</span>';
+    await loadWallet(); await loadChain(); setTimeout(()=>closeModal("transferModal"),700);
+  }catch(e){$("transferStatus").innerHTML='<span class="bad">'+e.message+"</span>"}
+}
+function setType(type){orderType=type;$("marketTab").classList.toggle("active",type==="MARKET");$("limitTab").classList.toggle("active",type==="LIMIT");["buyPrice","sellPrice"].forEach(id=>$(id).classList.toggle("hidden",type==="MARKET"))}
+async function loadBook(){
+  currentPair=$("pair").value;const base=currentPair.split("/")[0];
+  try{
+    const d=await api("/api/orderbook/"+base), b=d.book||{};
+    $("asks").innerHTML=(b.asks||[]).slice(0,10).reverse().map(x=>'<div class="bookrow ask"><span>'+Number(x[0]).toLocaleString(undefined,{maximumFractionDigits:6})+'</span><span>'+x[1]+"</span></div>").join("");
+    $("bids").innerHTML=(b.bids||[]).slice(0,10).map(x=>'<div class="bookrow bid"><span>'+Number(x[0]).toLocaleString(undefined,{maximumFractionDigits:6})+'</span><span>'+x[1]+"</span></div>").join("");
+    $("bookTime").textContent="Live";
+  }catch(e){}
+}
+async function loadTrade(){await loadMarket();loadBook();updateTicker();loadOrders()}
+function updateTicker(){
+  const x=marketItems[currentPair.split("/")[0]];if(!x)return;
+  $("tradePrice").textContent="$"+Number(x.price).toLocaleString(undefined,{maximumFractionDigits:x.price<1?6:2});
+  $("tradeChange").textContent=(x.change>=0?"+":"")+x.change.toFixed(2)+"% · "+x.source;$("source").textContent=x.source;
+  drawChart(x.price)
+}
+function drawChart(price){
+  const c=$("chart"),ctx=c.getContext("2d"),w=c.clientWidth*devicePixelRatio,h=c.clientHeight*devicePixelRatio;c.width=w;c.height=h;ctx.clearRect(0,0,w,h);
+  const base=price*.992, pts=[];for(let i=0;i<70;i++)pts.push(base+(price-base)*(i/69)+price*.002*Math.sin(i/4));
+  ctx.beginPath();pts.forEach((v,i)=>{const x=i/(pts.length-1)*w,y=h-(v-base)/(price-base+price*.002)*h*.75-h*.08;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.strokeStyle="#f21e3a";ctx.lineWidth=2*devicePixelRatio;ctx.stroke()
+}
+function pct(side,p){const x=marketItems[currentPair.split("/")[0]]?.price||0;const el=$(side+"Qty");el.value=x?((10000*p)/x).toFixed(8):""}
+async function order(side){
+  if(!token){openAuth();return}
+  const q=parseFloat($(side==="BUY"?"buyQty":"sellQty").value||"0");const price=parseFloat($(side==="BUY"?"buyPrice":"sellPrice").value||"0");
+  if(!q)return $("tradeStatus").textContent="Miqdar daxil edin.";
+  try{
+    const d=await api("/api/order",{method:"POST",body:JSON.stringify({symbol:currentPair,side,type:orderType,quantity:q,price})});
+    $("tradeStatus").innerHTML='<span class="ok">Əmr qəbul edildi · '+d.status+" · #"+d.order_id+"</span>";await Promise.all([loadWallet(),loadOrders(),loadBook()])
+  }catch(e){$("tradeStatus").innerHTML='<span class="bad">'+e.message+"</span>"}
+}
+async function loadOrders(){
+  if(!token){$("orders").textContent="Daxil olun.";return}
+  try{const d=await api("/api/orders");$("orders").innerHTML=(d.orders||[]).map(o=>'<div class="marketrow"><div class="marketname"><b>#'+o.id+" "+o.side+" "+o.symbol+'</b><span>'+o.type+" · "+o.status+"</span></div><div class=\"price\">"+Number(o.quantity).toFixed(6)+"</div><button class=\"link\" onclick=\"cancelOrder("+o.id+")\">Ləğv</button></div>").join("")||"Açıq əmr yoxdur."}catch(e){$("orders").textContent=e.message}
+}
+async function cancelOrder(id){try{await api("/api/cancel",{method:"POST",body:JSON.stringify({id})});loadOrders()}catch(e){alert(e.message)}}
+async function loadChain(){
+  try{
+    const d=await api("/api/chain");$("height").textContent=d.height;$("valid").textContent=d.valid?"YES":"NO";
+    $("blocks").innerHTML=(d.blocks||[]).map(b=>'<div class="block"><b>Block #'+b.index+'</b><div class="hash">hash: '+b.hash+'</div><div class="hash">prev: '+b.previous_hash+'</div><div>'+b.transactions.length+" transaction(s)</div></div>").join("")
+  }catch(e){$("blocks").textContent=e.message}
+}
+function connectRealtime(){
+  try{
+    const wsurl=API.replace(/^http/,"ws")+":8081"; // corrected below when network reports a different port
+    const ws=new WebSocket(wsurl);
+    ws.onmessage=e=>{const d=JSON.parse(e.data);if(d.type==="ticker"){marketItems[d.item.symbol]=d.item;renderMarket();updateTicker()}}
+  }catch(e){}
+}
+window.addEventListener("resize",()=>{if($("trade").classList.contains("active"))updateTicker()});
+refresh();
+setInterval(loadNetwork,10000);
+setInterval(loadMarket,5000);
+</script>
+</body>
+</html>
