@@ -1,27 +1,54 @@
-# NARaz v1.3
+# NARaz v1.4
 
-NARaz v1.3 is a direct continuation of v1.2. The existing registration, login, NARaz Network, wallet, transfers, market feed and branded interface remain in place.
+NARaz v1.4 is the next functional testnet build, not a screenshot/mockup.
 
-## v1.3 exchange layer
+## Included
 
-- Binance-style professional trading terminal, branded as NARaz.
-- Real-time public market stream: Binance WebSocket is the primary continuous source for ticker, depth and 1h kline updates; REST is only bootstrap/fallback.
-- BTC/USDT, ETH/USDT, BNB/USDT and SOL/USDT trading pairs.
-- Live 1h market candles when Binance public klines are reachable.
-- Real-time Binance order book stream when the NARaz Network server has internet access.
-- Market orders on the NARaz exchange testnet use the current live external market price without artificial price impact.
-- Limit orders and a NARaz testnet matching engine between authenticated users.
-- Open-order list and cancellation.
-- Available vs locked exchange balances.
-- 0.10% testnet trading fee.
-- Exchange state is intentionally separated from the NARaz on-chain ledger until a production custody/settlement design is approved.
+- NARaz Network HTTP API.
+- Separate real-time WebSocket endpoint.
+- Persistent SQLite accounts/sessions.
+- PBKDF2-HMAC-SHA256 password hashing.
+- Automatic account provisioning.
+- Native NARaz testnet balance.
+- Custom hash-linked NARaz blockchain with genesis block and chain validation.
+- Faucet/testnet issuance.
+- Wallet/holdings API.
+- Live public market data from Binance WebSocket with REST fallback.
+- Live order-book endpoint.
+- Demo exchange:
+  - Market orders against current public market price.
+  - Limit orders.
+  - User-to-user matching engine.
+  - Open orders and cancellation.
+  - 0.10% demo fee.
+- Responsive NARaz mobile-first interface.
+- Network health, chain explorer, wallet, authentication and trading UI.
 
-## Network
+## Run
 
-The backend exposes the HTTP API on `NARAZ_PORT` (default 8080) and the NARaz real-time WebSocket on `NARAZ_WS_PORT` (default HTTP port + 1). The Android client receives the WebSocket port from `/api/network` and subscribes automatically. The server must have outbound internet access to reach Binance's public WebSocket.
+```bash
+cd backend
+python -m venv .venv
+# activate the environment
+pip install -r requirements.txt
+python server.py
+```
 
-## Important
+Frontend can be opened from `frontend/index.html`.
 
-v1.3 is a functional exchange **testnet foundation**, not a production Binance replacement. It does not claim real external liquidity, real-money settlement, custody, KYC/AML, or production-grade matching-engine guarantees. Those require dedicated infrastructure, security review, legal work, and audited blockchain/wallet components.
+For a phone on the same Wi-Fi, set the Network endpoint in the app to the computer/server LAN address, for example:
 
-The design goal is to build a NARaz platform that can eventually exceed the user experience and transparency of large exchanges without copying their branding.
+`http://192.168.1.10:8080`
+
+## Demo account
+
+Username: `demo`
+Password: `demo12345`
+
+New registrations also receive 10,000 USDT demo trading balance and 10,000 NARaz testnet units.
+
+## Important boundary
+
+This build is a functional testnet/demo exchange and development network. It is not yet a legally deployable public financial exchange or production public blockchain. Before real-money/public operation, the project still requires audited cryptography/custody, HTTPS, key management, rate limiting, abuse controls, KYC/AML where applicable, independent security review, operational monitoring, backups, consensus/P2P hardening and legal/regulatory approval.
+
+The code intentionally keeps demo exchange balances separate from the NARaz chain ledger.
